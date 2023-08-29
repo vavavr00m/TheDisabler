@@ -14,7 +14,6 @@ for %%A in (%loc%) do (
 		) 
 	) else ( echo\ && echo Does not exist - "%%~A")
 )
-pause>nul
 goto :replace_DefaultGame_ini
 exit /b 0
 
@@ -27,5 +26,7 @@ echo\
 for %%A in (%loc%) do (
 	if exist "%%~A" ( echo Exists - "%%~A" && start "" /wait /min powershell.exe -NoP -Ex -By -c "(Get-Content -Path '%%~A') | ForEach-Object { $_.Replace(';+StartupMovies=StartupUE4','').Replace(';+StartupMovies=StartupNvidia','').Replace(';+StartupMovies=CinematicIntroV2','').Replace(';-StartupMovies=StartupUE4','').Replace(';-StartupMovies=StartupNvidia','').Replace(';-StartupMovies=CinematicIntroV2','').Replace('; -StartupMovies=StartupUE4','').Replace('; -StartupMovies=StartupNvidia','').Replace('; -StartupMovies=CinematicIntroV2','').Replace('; +StartupMovies=StartupUE4','').Replace('; +StartupMovies=StartupNvidia','').Replace('; +StartupMovies=CinematicIntroV2','').Replace('+StartupMovies=StartupUE4','').Replace('+StartupMovies=StartupNvidia','').Replace('+StartupMovies=CinematicIntroV2','').Replace('-StartupMovies=StartupUE4','').Replace('-StartupMovies=StartupNvidia','').Replace('-StartupMovies=CinematicIntroV2','').Replace('bWaitForMoviesToComplete=True','bWaitForMoviesToComplete=False').Replace('bMoviesAreSkippable=False','bMoviesAreSkippable=True').Replace('-StartupMovies=','').Replace(';-StartupMovies=','').Replace('; -StartupMovies=','') } | Set-Content -Path '%%~A'" ) else ( echo Does not exist - "%%~A" )
 )
+
+echo The end.
 pause>nul
 exit /b 0
