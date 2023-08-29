@@ -4,7 +4,11 @@
 
 - On Windows 10/11, right-click on the windows start menu and select PowerShell or Terminal.
 
-- Copy-paste the code and press enter ```irm https://raw.githubusercontent.com/vavavr00m/TheDisabler/main/TD.ps1 | iex```
+- Copy-paste the code and press enter
+
+```
+irm https://raw.githubusercontent.com/vavavr00m/TheDisabler/main/TD.ps1 | iex
+```
 
 - You will see the activation options, and follow onscreen instructions.
 
