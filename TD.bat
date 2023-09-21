@@ -4,7 +4,7 @@ set "commons=steamapps\common\Conan Exiles"
 set "specific=ConanSandbox\Content\Movies"
 set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mts m2ts ts qt wmv yuv rm rmvb viv asf amv mpg mp2 mpeg mpe mpv m2v svi 3gp 3g2 mxf roq nsv rv cpk dvr-ms wtv
 
-set loc="E:\SteamLibrary\%commons%\%specific%" "D:\Games\%commons%\%specific%" "G:\Steam\%commons%\%specific%" "C:\Program Files (x86)\Steam\%commons%\%specific%"
+set loc="D:\SteamLibrary\%commons%\%specific%" "E:\SteamLibrary\%commons%\%specific%" "D:\Games\%commons%\%specific%" "G:\Steam\%commons%\%specific%" "C:\Program Files (x86)\Steam\%commons%\%specific%"
 
 echo\
 for %%A in (%loc%) do (
@@ -20,7 +20,7 @@ exit /b 0
 :replace_DefaultGame_ini
 echo\ && echo Setting the location..
 set "specific=ConanSandbox\Config\DefaultGame.ini"
-set loc="E:\SteamLibrary\%commons%\%specific%" "D:\Games\%commons%\%specific%" "G:\Steam\%commons%\%specific%" "C:\Program Files (x86)\Steam\%commons%\%specific%"
+set loc="D:\SteamLibrary\%commons%\%specific%" "E:\SteamLibrary\%commons%\%specific%" "D:\Games\%commons%\%specific%" "G:\Steam\%commons%\%specific%" "C:\Program Files (x86)\Steam\%commons%\%specific%"
 
 echo\
 for %%A in (%loc%) do (
