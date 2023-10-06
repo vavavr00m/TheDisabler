@@ -7,6 +7,7 @@ set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mt
 
 set "specific=ConanSandbox\Content\Movies"
 set "ini=ConanSandbox\Config\DefaultGame.ini"
+set "gameini=ConanSandbox\Saved\Config\WindowsNoEditor\Game.ini"
 goto :process
 
 :process
@@ -24,9 +25,12 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					for %%C in (%ext%) do if exist "%%A:\%%~k\%commons%\%specific%\*.%%C" ( echo Processing all %%C files in "%%A:\%%~k\%commons%\%specific%" && echo\ && dir "%%A:\%%~k\%commons%\%specific%\*.%%C" && echo\ & echo\ && echo Moving the following to "%%A:\%%~k\%commons%\%specific%\bak": && echo\ && @move "%%A:\%%~k\%commons%\%specific%\*.%%C" "%%A:\%%~k\%commons%\%specific%\bak" && echo\ ) else ( echo No file with %%C extension exists in "%%A:\%%~k\%commons%\%specific%" )
 				echo\
 				) else ( md "%%A:\%%~k\%commons%\%specific%\bak" && goto :process )
-				echo Looking for DefaultGame.ini to delete lines
-				if exist "%%A:\%%~k\%commons%\%ini%" ( echo Found - "%%A:\%%~k\%commons%\%ini%" && echo\ && start "" /wait /min powershell.exe -NoP -Ex -By -c "(Get-Content -Path '%%A:\%%~k\%commons%\%ini%') | ForEach-Object { $_.Replace(';+StartupMovies=StartupUE4','').Replace(';+StartupMovies=StartupNvidia','').Replace(';+StartupMovies=CinematicIntroV2','').Replace(';-StartupMovies=StartupUE4','').Replace(';-StartupMovies=StartupNvidia','').Replace(';-StartupMovies=CinematicIntroV2','').Replace('; -StartupMovies=StartupUE4','').Replace('; -StartupMovies=StartupNvidia','').Replace('; -StartupMovies=CinematicIntroV2','').Replace('; +StartupMovies=StartupUE4','').Replace('; +StartupMovies=StartupNvidia','').Replace('; +StartupMovies=CinematicIntroV2','').Replace('+StartupMovies=StartupUE4','').Replace('+StartupMovies=StartupNvidia','').Replace('+StartupMovies=CinematicIntroV2','').Replace('-StartupMovies=StartupUE4','').Replace('-StartupMovies=StartupNvidia','').Replace('-StartupMovies=CinematicIntroV2','').Replace('bWaitForMoviesToComplete=True','bWaitForMoviesToComplete=False').Replace('bMoviesAreSkippable=False','bMoviesAreSkippable=True').Replace('-StartupMovies=','').Replace(';-StartupMovies=','').Replace('; -StartupMovies=','') } | Set-Content -Path '%%A:\%%~k\%commons%\%ini%'" 
+				echo Searching for DefaultGame.ini to delete lines
+				if exist "%%A:\%%~k\%commons%\%ini%" ( echo Found - "%%A:\%%~k\%commons%\%ini%" && echo\ && start "" /wait /min powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "(Get-Content -Path '%%A:\%%~k\%commons%\%ini%') | ForEach-Object { $_.Replace(';+StartupMovies=StartupUE4','').Replace(';+StartupMovies=StartupNvidia','').Replace(';+StartupMovies=CinematicIntroV2','').Replace(';-StartupMovies=StartupUE4','').Replace(';-StartupMovies=StartupNvidia','').Replace(';-StartupMovies=CinematicIntroV2','').Replace('; -StartupMovies=StartupUE4','').Replace('; -StartupMovies=StartupNvidia','').Replace('; -StartupMovies=CinematicIntroV2','').Replace('; +StartupMovies=StartupUE4','').Replace('; +StartupMovies=StartupNvidia','').Replace('; +StartupMovies=CinematicIntroV2','').Replace('+StartupMovies=StartupUE4','').Replace('+StartupMovies=StartupNvidia','').Replace('+StartupMovies=CinematicIntroV2','').Replace('-StartupMovies=StartupUE4','').Replace('-StartupMovies=StartupNvidia','').Replace('-StartupMovies=CinematicIntroV2','').Replace('bWaitForMoviesToComplete=True','bWaitForMoviesToComplete=False').Replace('bMoviesAreSkippable=False','bMoviesAreSkippable=True').Replace('-StartupMovies=','').Replace(';-StartupMovies=','').Replace('; -StartupMovies=','') } | Set-Content -Path '%%A:\%%~k\%commons%\%ini%'" 
 				) else ( echo Does not exist - "%%A:\%%~k\%commons%\%ini%" )
+				echo Searching for Game.ini to delete lines
+				if exist "%%A:\%%~k\%commons%\%gameini%" ( echo Found - "%%A:\%%~k\%commons%\%gameini%" && echo\ && start "" /wait /min powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "(Get-ChildItem '%%A:\%%~k\%commons%\%gameini%\' -File -recurse | Where{!(Select-String -SimpleMatch ('[/This/IsJust.AnExample]','IsThisTrue=False','IsThisFalse=') -Path $_.fullname -Quiet)} | ForEach{ $Path = $_.FullName; ('[/This/IsJust.AnExample]','IsThisTrue=False','IsThisFalse='),(Get-Content $Path) | Set-Content $Path })"
+				) else ( echo Does not exist - "%%A:\%%~k\%commons%\%gameini%" )
 		) else ( echo Nonexistent - "%%A:\%%~k\%commons%\%specific%" )
 ) else ( echo Nonexistent drive - %%A:\ )
 echo\ && echo The End.
