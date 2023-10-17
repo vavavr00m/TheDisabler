@@ -6,7 +6,7 @@ set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mt
 set NEWLINE=^& echo.
 set "specific=ConanSandbox\Content\Movies"
 set "ini=ConanSandbox\Config\DefaultGame.ini"
-set "gameini=ConanSandbox\Saved\Config\WindowsNoEditor\Game.ini"
+set "gameini=ConanSandbox\Saved\Config\WindowsNoEditor"
 set gameinilist=[/Script/MoviePlayer.MoviePlayerSettings],bWaitForMoviesToComplete=False,StartupMovies=
 goto :process
 
@@ -35,7 +35,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 				
 				echo Searching for Game.ini to add lines
 				rem chcp 65001 > nul converts encoding of ini to UTF-8
-				if exist "!gameini!" ( echo Found - "!gameini!" && start "" /wait /min powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "(Get-ChildItem -Path '!gameini!' | ForEach-Object { (Get-Content $_) | Out-File -Encoding ascii $_ })"
+				if exist "!gameini!\Game.ini" ( echo Found - "!gameini!\Game.ini" && start "" /wait /min powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "(Get-ChildItem -Path '!gameini!\Game.ini' | ForEach-Object { (Get-Content $_) | Out-File -Encoding ascii $_ })"
 
 					rem Define the strings that needs to be reviewed
 					set "n=0"
@@ -52,7 +52,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					
 					rem Get the line number of the first line of "existing content"
 					set "skip="
-					for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% "!gameini!"') do (
+					for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% "!gameini!\Game.ini"') do (
 					   if not defined skip if "%%b" neq "" set /A "skip=%%a-1"
 					)
 					if defined skip (
@@ -65,13 +65,13 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					
 					rem Insert the strings at beginning of output file
 					(
-					for /L %%i in (1,1,%n%) do echo !string[%%i]!
+					for /L %%q in (1,1,%n%) do echo !string[%%q]!
 					echo/
-					for /F "%skip% delims=" %%a in (!gameini!) do echo %%a
-					) > output.txt
+					for /F "%skip% delims=" %%a in ("!gameini!\Game.ini") do echo %%a
+					) > "!gameini!\output.ini"
 					
 					rem Last step: update input file
-					move /Y output.txt "!gameini!"
+					move /Y "!gameini!\output.ini" "!gameini!\Game.ini"
 
 				) else ( echo Does not exist - "!gameini!" && echo\ )
 				
