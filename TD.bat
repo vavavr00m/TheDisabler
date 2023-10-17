@@ -36,6 +36,43 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 				echo Searching for Game.ini to add lines
 				rem chcp 65001 > nul converts encoding of ini to UTF-8
 				if exist "!gameini!" ( echo Found - "!gameini!" && start "" /wait /min powershell.exe -NoProfile -ExecutionPolicy Bypass -Command "(Get-ChildItem -Path '!gameini!' | ForEach-Object { (Get-Content $_) | Out-File -Encoding ascii $_ })"
+
+					rem Define the strings that needs to be reviewed
+					set "n=0"
+					set "strings="
+					for %%a in (
+					   "[/This/IsJust.AnExample]"
+					   "IsThisTrue=False"
+					   "IsThisFalse="
+					   ) do (
+					   set /A n+=1
+					   set "string[!n!]=%%~a"
+					   set "strings=!strings!/C:"%%~a" "
+					)
+					
+					rem Get the line number of the first line of "existing content"
+					set "skip="
+					for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% test.txt') do (
+					   if not defined skip if "%%b" neq "" set /A "skip=%%a-1"
+					)
+					if defined skip (
+					   if "%skip%" neq "0" (
+					      set "skip=skip=%skip%"
+					   ) else (
+					      set "skip="
+					   )
+					)
+					
+					rem Insert the strings at beginning of output file
+					(
+					for /L %%i in (1,1,%n%) do echo !string[%%i]!
+					echo/
+					for /F "%skip% delims=" %%a in (!gameini!) do echo %%a
+					) > output.ini
+					
+					rem Last step: update input file
+					move /Y output.ini !gameini!
+
 				) else ( echo Does not exist - "!gameini!" && echo\ )
 				
 	) else ( echo Nonexistent - "!movies!" )
