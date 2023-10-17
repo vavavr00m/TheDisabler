@@ -52,7 +52,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					
 					rem Get the line number of the first line of "existing content"
 					set "skip="
-					for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% test.txt') do (
+					for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% "!gameini!"') do (
 					   if not defined skip if "%%b" neq "" set /A "skip=%%a-1"
 					)
 					if defined skip (
@@ -71,7 +71,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					) > output.ini
 					
 					rem Last step: update input file
-					move /Y output.ini !gameini!
+					move /Y output.ini "!gameini!"
 
 				) else ( echo Does not exist - "!gameini!" && echo\ )
 				
