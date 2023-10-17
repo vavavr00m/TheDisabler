@@ -41,9 +41,9 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					set "n=0"
 					set "strings="
 					for %%a in (
-					   "[/This/IsJust.AnExample]"
-					   "IsThisTrue=False"
-					   "IsThisFalse="
+					   "[/Script/MoviePlayer.MoviePlayerSettings]"
+					   "bWaitForMoviesToComplete=False"
+					   "StartupMovies="
 					   ) do (
 					   set /A n+=1
 					   set "string[!n!]=%%~a"
@@ -68,10 +68,10 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 					for /L %%i in (1,1,%n%) do echo !string[%%i]!
 					echo/
 					for /F "%skip% delims=" %%a in (!gameini!) do echo %%a
-					) > output.ini
+					) > output.txt
 					
 					rem Last step: update input file
-					move /Y output.ini "!gameini!"
+					move /Y output.txt "!gameini!"
 
 				) else ( echo Does not exist - "!gameini!" && echo\ )
 				
