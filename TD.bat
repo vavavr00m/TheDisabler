@@ -2,20 +2,10 @@
 
 set drive_letter=c d e f g h i j k l m n o p q r s t u v w x y z
 set "title=Conan Exiles"
-set "commons=steamapps\common\Conan Exiles\ConanSandbox"
-set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mts m2ts ts qt wmv yuv rm rmvb viv asf amv mpg mp2 mpeg mpe mpv m2v svi 3gp 3g2 mxf roq nsv rv cpk dvr-ms wtv
-
-set "specific=Content\Movies"
-set "defaultini=Config\DefaultGame.ini"
-
+set "commons=steamapps\common\%title%\ConanSandbox"
 set "gameiniloc=Saved\Config\WindowsNoEditor"
-set "gamein=Game.ini"
-set "game_in=Game .ini"
-set "gameout=out.ini"
-
-set "BattleEye=Binaries\Win64\ConanSandbox_BE.exe"
-set "Standard=Binaries\Win64\ConanSandbox.exe"
-
+set "bin=Binaries\Win64\"
+set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mts m2ts ts qt wmv yuv rm rmvb viv asf amv mpg mp2 mpeg mpe mpv m2v svi 3gp 3g2 mxf roq nsv rv cpk dvr-ms wtv
 goto :process
 
 :process
@@ -26,7 +16,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 	echo Existing drive found - %%A:\ - Searching for %title% directory
 	for /f usebackq^tokens^=1-3*delims^=^" %%a in =;(
 		`type "%~f0" ^| findstr /b \^"`
-			);= do set "movies=%%A:\%%~c\%commons%\%specific%" && set "defaultgameini=%%A:\%%~c\%commons%\%defaultini%" && set "gameini=%%A:\%%~c\%commons%\%gameiniloc%\%gamein%" && set "game_ini=%%A:\%%~c\%commons%\%gameiniloc%\%game_in%" && set "outini=%%A:\%%~c\%commons%\%gameiniloc%\%gameout%" && set "BE=%%A:\%%~c\%commons%\%BattleEye%" && set "STD=%%A:\%%~c\%commons%\%Standard%"
+			);= do set "movies=%%A:\%%~c\%commons%\Content\Movies" && set "defaultgameini=%%A:\%%~c\%commons%\Config\DefaultGame.ini" && set "gameini=%%A:\%%~c\%commons%\%gameiniloc%\Game.ini" && set "game_ini=%%A:\%%~c\%commons%\%gameiniloc%\Game .ini" && set "outini=%%A:\%%~c\%commons%\%gameiniloc%\out.ini" && set "BE=%%A:\%%~c\%commons%\%bin%\ConanSandbox_BE.exe" && set "STD=%%A:\%%~c\%commons%\%bin%\ConanSandbox.exe" && set "FCL=%%A:\%%~c\steamapps\common\%title%\Launcher\FuncomLauncher.exe"
 				
 				if exist "!movies!" ( echo Found - "!movies!"
 					if exist "!movies!\bak" (
