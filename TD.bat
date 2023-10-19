@@ -92,29 +92,18 @@ for %%a in (
 	set "strings=!strings!/C:"%%~a" "
 )
 
-echo/ && echo Getting the line number of the first line of "existing content"
-set "skip="
-for /F "tokens=1* delims=:" %%a in ('findstr /N /V /L %strings% "%gameini%"') do (
-	if not defined skip if "%%b" neq "" set /A "skip=%%a-1"
-)
-if defined skip (
-	if "%skip%" neq "0" (
-		set "skip=skip=%skip%"
-	) else (
-		set "skip="
-	)
-)
-
-echo/ && echo Inserting the strings at beginning of output file
+rem Generate the output file:
 (
+rem First, insert the strings at beginning
 for /L %%i in (1,1,%n%) do echo !string[%%i]!
 echo/
-for /F "%skip% delims=" %%a in (%gameini%) do echo %%a
-) >> "%outini%"
+rem Then, insert the lines in the file that have NOT the strings
+for /F "delims=" %%a in ('findstr /V /L %strings% "%gameini%"') do echo %%a
+) > "%outini%"
 
 echo/ && echo Last step: Updating input file
-copy "%outini%" + "%gameini%" /b
 move /Y "%outini%" "%gameini%"
+
 echo/
 endlocal
 exit /b 0
