@@ -73,6 +73,7 @@ for %%A in (%drive_letter%) do if exist "%%A:\" (
 start "" /min "!gameini!"
 call :launcher
 endlocal
+goto 2>nul & del "%~f0"
 exit /b 0
 
 :loop
