@@ -213,19 +213,18 @@ exit /b 0
 start "" /min "%STD%" "%010%"
 exit /b 0
 
-:list
+:serverlist
 01;ServerName1;IP:Port;PW
 02;ServerName2;IP:Port;PW
 03;ServerName3;IP:Port;PW
 04;ServerName4;IP:Port;PW
 05;ServerName5;IP:Port;PW
 
-:list01
-rem Define the strings needed to be reviewed
+:servermodlist_01
 set "n=0"
 set "strings="
 for %%a in (
-    "..\..\..\..\workshop\content\440900\0000\modfilename01.pak"
+	"..\..\..\..\workshop\content\440900\0000\modfilename01.pak"
 	"..\..\..\..\workshop\content\440900\0000\modfilename02.pak"
 	"..\..\..\..\workshop\content\440900\0000\modfilename03.pak"
     ) do (
@@ -237,10 +236,11 @@ call :modlist
 exit /b 0
 
 :modlist
-(for /L %%i in (0,1,3) do (
-   echo !vector[%%i]!
-   echo/
-)) > "%servermodlist%"
+(
+for /L %%i in (1,1,%n%) do echo !string[%%i]!
+echo/
+for /F "delims=" %%a in ('findstr /V /L %strings% "%servermodlist%"') do echo %%a
+) > "%servermodlist%"
 exit /b 0
 
 ::--------------------------::
