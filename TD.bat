@@ -1,3 +1,13 @@
+::CREDITS
+::@Matt - Auto-elevate batch script - https://stackoverflow.com/a/12264592/21996598
+::@Compo - Find Steam folder and file paths - https://stackoverflow.com/a/39943515/11432377
+::@phorcys - Find and extract SteamLibrary Paths - https://github.com/phorcys/Taiwu_mods/blob/master/genvsproj.cmd
+::@Aacini - Find several different strings in a txt & do something - https://stackoverflow.com/a/77284696/11432377
+::@mc-nd & @john-smith - Create an empty file without an extension - https://stackoverflow.com/a/21382039/21996598
+::@dbenham - How to make a batch delete itself - https://stackoverflow.com/a/20333575/21996598
+::@mlocati - ANSI Colors in standard Windows 10 shell - https://gist.github.com/mlocati/fdabcaeb8071d5c75a2d51712db24011
+::@vavavr00m (me) - https://github.com/vavavr00m/
+
 @echo off
 
 set drive_letter=c d e f g h i j k l m n o p q r s t u v w x y z
@@ -52,8 +62,8 @@ for /f "skip=2 eol=} delims=" %%i in ('type "%SPth%\steamapps\libraryfolders.vdf
                 SET "libraryPath=!libraryPath:~1%!"
                 SET "libraryPath=!libraryPath:\\=\!"
 				
-		ECHO\			
-                ECHO Searching steam library path "!libraryPath!"...
+		echo\			
+                ECHO Writing SteamLibrary path(s) to file...
 		ECHO "!libraryPath!" >>SteamLibraryPaths.txt
 
 		SET "libdir=!libraryPath!\steamapps\common\"
