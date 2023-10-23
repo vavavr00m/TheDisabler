@@ -12,6 +12,60 @@ set "008=-nosplash"
 set "009=-BattleEye"
 set "010="
 set ext=mp4 mov mkv m4p m4v webm flv f4v f4p f4a f4b vob ogv drc gifv mng avi mts m2ts ts qt wmv yuv rm rmvb viv asf amv mpg mp2 mpeg mpe mpv m2v svi 3gp 3g2 mxf roq nsv rv cpk dvr-ms wtv
+goto :FindSteamPaths
+
+:FindSteamPaths
+Set "SExe="
+Set "SPth="
+For /F "Tokens=1,2*" %%A In ('Reg Query HKCU\SOFTWARE\Valve\Steam') Do (
+    If "%%A" Equ "SteamExe" Set "SExe=%%C"
+    If "%%A" Equ "SteamPath" Set "SPth=%%C")
+If Not Defined SExe Exit/B
+
+rem Set the paths
+Echo=The full path to the Steam executable is "%SExe%"
+If Defined SPth Set "SPth=%SPth:/=\%" && Echo=The Steam folder path is "%SPth%"
+ECHO\
+goto :ReadSteamVdf
+
+:ReadSteamVdf
+setlocal enabledelayedexpansion
+REM Search each line for libary paths, these are indicated by key values from 1 to n for n library paths
+REM example line from libraryfolders.vdf file:
+REM <tab>"2"<tab><tab>"D:\\Steam"
+for /f "skip=2 eol=} delims=" %%i in ('type "%SPth%\steamapps\libraryfolders.vdf"') do (
+    SET "dataline=%%i"
+	
+    REM Strip leading tab
+    SET "dataline=!dataline:~1,-1%!"
+
+    REM *NOTE* delims contains a tab character
+    for /F "delims=	 tokens=1,2*" %%a in ("!dataline!") do (
+        IF NOT "!StopLoop!"=="true" (
+            REM Strip quotes from start/end of key
+            SET "key=%%a"
+            SET "key=!key:~1,-1%!"
+
+            IF "!key!"=="path" (
+                REM Strip quotes from start/end of value and replace \\ with \ in library path values
+                SET "libraryPath=%%b"
+                SET "libraryPath=!libraryPath:~1%!"
+                SET "libraryPath=!libraryPath:\\=\!"
+				
+		ECHO\			
+                ECHO Searching steam library path "!libraryPath!"...
+		ECHO "!libraryPath!" >>SteamLibraryPaths.txt
+
+		SET "libdir=!libraryPath!\steamapps\common\"
+                IF EXIST "!libdir!" (
+                    ECHO Found - "!libdir!"
+                    SET StopLoop=true 
+		)
+            )
+        )
+    )
+)
+endlocal
 goto :Conan_Exiles
 
 :Conan_Exiles
